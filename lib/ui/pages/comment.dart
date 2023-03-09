@@ -49,7 +49,6 @@ class _CommentSectionState extends State<CommentSection> {
                       'Comments',
                       style: TextStyle(
                         color: Color.fromARGB(255, 83, 83, 83),
-                        fontFamily: 'Red Hat Display',
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -77,7 +76,7 @@ class _CommentSectionState extends State<CommentSection> {
                                 ),
                                 child: Column(
                                   children: [
-                                    commentBox(comm: _comm, context: context, commentIndex: index),
+                                    commentBox(comm: _comm, context: context, commentIndex: index, data: data),
                                     _comm.reply.length == 0 ? SizedBox() :
                                     Container(
                                       margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -96,7 +95,7 @@ class _CommentSectionState extends State<CommentSection> {
                                               left: 20,
                                               right: 10,
                                             ),
-                                            child: commentBox(comm: Comment(date: "1", firstName: "Nardos Tamirat",imageUrl: "assets/images/p2.jpg", like: 8, liked: false, disLike: 7, reply: [], message: _reply), context: context, commentIndex: index),
+                                            child: commentBox(comm: Comment(date: "1", firstName: "Nardos Tamirat",imageUrl: "assets/images/p2.jpg", like: 8, liked: false, disLike: 7, reply: [], message: _reply), context: context, commentIndex: index, data: data),
                                           );
                                         },
                                       ),
