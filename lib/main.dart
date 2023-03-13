@@ -1,4 +1,5 @@
 import 'package:learncoding/api/google_signin_api.dart';
+import 'package:learncoding/theme/theme.dart';
 import 'package:learncoding/ui/pages/help.dart';
 import 'package:learncoding/ui/pages/navmenu/dashboard.dart';
 import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
@@ -69,24 +70,28 @@ class _MyAppState extends State<MyApp> {
       create: (context) => ThemeProvider(),
       builder: (context, _) {
         final themeProvider = Provider.of<ThemeProvider>(context);
-    return GetCupertinoApp(
-        localizationsDelegates: [
-          DefaultMaterialLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-        ],
-        onGenerateRoute: router.generateRoute,
-        onUnknownRoute: (settings) => CupertinoPageRoute(
-            builder: (context) => UndefinedScreen(
-                  name: settings.name,
-                )),
-        // theme: Provider.of<ThemeModel>(context).currentTheme,
-        debugShowCheckedModeBanner: false,
-        // home: Settings(),
-        // home: Profile(),
-        // home: name == null ? Onboarding() : MenuDashboardLayout(),
-        home: SplashScreen());
-  }
+        return MaterialApp(
+            //GetCupertinoApp
+            localizationsDelegates: [
+              DefaultMaterialLocalizations.delegate,
+              DefaultCupertinoLocalizations.delegate,
+              DefaultWidgetsLocalizations.delegate,
+            ],
+            themeMode: themeProvider.themeMode,
+            theme: Themes.lightTheme,
+            darkTheme: Themes.darkTheme,
+            onGenerateRoute: router.generateRoute,
+            onUnknownRoute: (settings) => CupertinoPageRoute(
+                builder: (context) => UndefinedScreen(
+                      name: settings.name,
+                    )),
+            // theme: Provider.of<ThemeProvider>(context).themeMode,
+            debugShowCheckedModeBanner: false,
+            // home: Settings(),
+            // home: Profile(),
+            // home: name == null ? Onboarding() : MenuDashboardLayout(),
+            home: SplashScreen());
+      });
 }
 
 class RestartWidget extends StatefulWidget {
@@ -125,14 +130,20 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
-        splash: Image.asset('assets/images/splash.png'),
-        duration: 3000,
-        splashIconSize: 350,
-        splashTransition: SplashTransition.slideTransition,
-        animationDuration: Duration(milliseconds: 1500),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        pageTransitionType: PageTransitionType.fade,
-        nextScreen: name == null ? Onboarding() : MenuDashboardLayout());
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Scaffold(
+      body: AnimatedSplashScreen(
+          splash: Image.asset('assets/images/splash.png'),
+          duration: 3000,
+          splashIconSize: 350,
+          splashTransition: SplashTransition.slideTransition,
+          animationDuration: Duration(milliseconds: 1500),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          pageTransitionType: PageTransitionType.fade,
+          nextScreen: name == null ? Onboarding() : MenuDashboardLayout()),
+    );
   }
 }

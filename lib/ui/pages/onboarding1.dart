@@ -4,8 +4,11 @@ import 'package:learncoding/ui/pages/navmenu/menu_dashboard_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learncoding/api/google_signin_api.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../theme/theme.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -197,9 +200,13 @@ class _OnboardingState extends State<Onboarding> {
   Widget build(BuildContext context) {
     // we will maintain the same layout-forming column but switch the
     // contained widgets in order to show the 3 different "pages"
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
+    final themeProvider = Provider.of<ThemeProvider>(context);
     createWidgets();
-    return CupertinoPageScaffold(
-      child: Column(
+    return Scaffold(
+      body: Column(
         children: <Widget>[
           const Spacer(flex: 3),
           AnimatedSwitcher(

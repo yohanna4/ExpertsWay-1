@@ -20,8 +20,6 @@ import '../../models/user.dart';
 import '../../theme/box_icons_icons.dart';
 import '../../theme/theme.dart';
 
-String? title;
-
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -32,6 +30,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   String? name;
   String? image;
+  String? title;
   bool lightmode = true;
   @override
   void initState() {
@@ -58,9 +57,15 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final text = Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+        ? 'DarkTheme'
+        : 'LightTheme';
     final themeProvider = Provider.of<ThemeProvider>(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           Container(
@@ -70,9 +75,9 @@ class _SettingsState extends State<Settings> {
               children: [
                 CupertinoButton(
                   padding: EdgeInsets.all(0),
-                  child: const Icon(
+                  child: Icon(
                     Icons.chevron_left,
-                    color: Colors.black,
+                    color: icon.color,
                     size: 35,
                   ),
                   onPressed: () {
@@ -80,13 +85,10 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
                 Container(
-                  child: const Text(
+                  child: Text(
                     'Settings',
                     textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontFamily: 'Red Hat Display',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20),
+                    style: textTheme.headline3,
                   ),
                 ),
                 Container(
@@ -129,26 +131,13 @@ class _SettingsState extends State<Settings> {
             child: Column(
               children: [
                 Text(
-                  name!,
-                  style: TextStyle(
-                    color: Colors.grey[800],
-                    fontFamily: 'Red Hat Display',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    // fontWeight: FontWeight.w500,
-                  ),
+                  name ?? "John Doe",
+                  style: textTheme.bodyText2,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: Text(
-                    name! + "@gmail.com",
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontFamily: 'Red Hat Display',
-                      fontSize: 14,
-                      // fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  child: Text(name ?? "JohnDoe@gmail.com",
+                      style: textTheme.bodyText2),
                 ),
               ],
             ),
@@ -181,10 +170,9 @@ class _SettingsState extends State<Settings> {
                         'Language',
                         Container(
                             margin: EdgeInsets.only(right: 10),
-                            child: const Text(
+                            child: Text(
                               "English(US)",
-                              style: TextStyle(
-                                  fontFamily: 'Red Hat Display', fontSize: 14),
+                              style: textTheme.bodyText2,
                             )),
                         Icons.arrow_forward_ios,
                         true, () {
@@ -192,12 +180,12 @@ class _SettingsState extends State<Settings> {
                     }),
                     _container(
                         Icons.cleaning_services,
-                        lightmode ? 'Dark Mode' : 'Light Mode',
+                        !themeProvider.isDarkMode ? 'Dark Mode' : 'Light Mode',
                         Transform.scale(
                           scale: 0.8,
                           child: CupertinoSwitch(
-                            trackColor: Colors.grey[700],
-                            activeColor: Color.fromARGB(255, 217, 238, 247),
+                            trackColor: Color.fromARGB(255, 217, 238, 247),
+                            activeColor: Color.fromARGB(0, 76, 185, 22),
                             thumbColor: !themeProvider.isDarkMode
                                 ? Colors.blue
                                 : Colors.grey[900],
@@ -209,6 +197,7 @@ class _SettingsState extends State<Settings> {
                                     listen: false);
                                 provider.toggleTheme(value);
                               });
+                              setState(() {});
                             },
                           ),
                         ),
@@ -241,11 +230,14 @@ class _SettingsState extends State<Settings> {
 
   Widget _container(IconData leading, title, Widget? info, IconData? trailing,
       bool splash, VoidCallback tapped) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    Color secondbackgroundColor = Theme.of(context).backgroundColor;
+    IconThemeData icon = Theme.of(context).iconTheme;
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: secondbackgroundColor,
             boxShadow: const [
               BoxShadow(
                   blurRadius: 10,
@@ -288,16 +280,7 @@ class _SettingsState extends State<Settings> {
                       SizedBox(
                         width: 20,
                       ),
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontFamily: 'Red Hat Display',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          // fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      Text(title, style: textTheme.bodyText2), //15
                     ],
                   ),
                   Row(
@@ -312,7 +295,7 @@ class _SettingsState extends State<Settings> {
                               margin: EdgeInsets.only(right: 15),
                               child: Icon(
                                 trailing,
-                                color: Colors.grey[800],
+                                color: icon.color,
                                 size: 20,
                               ),
                             )
@@ -343,17 +326,20 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget buildAddPhoto(Color color) => ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(5),
-          color: color,
-          child: InkWell(
-              onTap: () {},
-              child: Icon(
-                Icons.mode_edit_outline_outlined,
-                color: Colors.white,
-                size: 17,
-              )),
-        ),
-      );
+  Widget buildAddPhoto(Color color) {
+    IconThemeData icon = Theme.of(context).iconTheme;
+    return ClipOval(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        color: color,
+        child: InkWell(
+            onTap: () {},
+            child: Icon(
+              Icons.mode_edit_outline_outlined,
+              color: icon.color,
+              size: 17,
+            )),
+      ),
+    );
+  }
 }

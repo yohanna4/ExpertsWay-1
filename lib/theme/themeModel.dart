@@ -5,10 +5,10 @@ import 'package:learncoding/theme/theme.dart';
 enum ThemeType { Light, Dark }
 
 class ThemeModel extends ChangeNotifier {
-  ThemeData currentTheme = kLightTheme;
+  // ThemeData currentTheme = kLightTheme;
   ThemeType themeType = ThemeType.Dark;
 
-  ThemeModel(this.currentTheme, this.themeType);
+  // ThemeModel(this.currentTheme, this.themeType);
 
   // toggleTheme() {
   //   if (this.themeType == ThemeType.Dark) {

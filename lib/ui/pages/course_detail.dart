@@ -456,130 +456,129 @@ class _CoursePagePageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
+    return Scaffold(
       backgroundColor: config.Colors().secondColor(1),
-      child: Stack(
+      body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-              height: MediaQuery.of(context).size.height + 60,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    buildCoverImage(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Row(
-                              children: <Widget>[
-                                const Text(
-                                  "Description",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 138, 138, 138),
-                                      fontSize: 14),
-                                ),
-                                const Spacer(),
-                                CupertinoButton(
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.comment_outlined,
-                                    size: 20,
-                                  ),
-                                  onPressed:
-                                      () {}, // TODO: implement this method: showing comments for this course
-                                ),
-                                CupertinoButton(
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.bookmark_outline,
-                                    size: 20,
-                                  ),
-                                  onPressed:
-                                      () {}, // TODO: implement this method: bookmarking this course
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                              margin: const EdgeInsets.all(8),
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Text(
-                                widget.courseData.description,
-                                textAlign: TextAlign.justify,
-                                style: const TextStyle(
-                                  color: Color(0xFF343434),
-                                ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 8.0,
-                            ),
-                            child: Row(
-                              children: const <Widget>[
-                                Text(
-                                  "Select chapter",
-                                  style: TextStyle(
+            height: MediaQuery.of(context).size.height + 60,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  buildCoverImage(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: <Widget>[
+                              const Text(
+                                "Description",
+                                style: TextStyle(
                                     color: Color.fromARGB(255, 138, 138, 138),
-                                  ),
+                                    fontSize: 14),
+                              ),
+                              const Spacer(),
+                              CupertinoButton(
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.comment_outlined,
+                                  size: 20,
                                 ),
-                              ],
-                            ),
+                                onPressed:
+                                    () {}, // TODO: implement this method: showing comments for this course
+                              ),
+                              CupertinoButton(
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.bookmark_outline,
+                                  size: 20,
+                                ),
+                                onPressed:
+                                    () {}, // TODO: implement this method: bookmarking this course
+                              )
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                            margin: const EdgeInsets.all(8),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Text(
+                              widget.courseData.description,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(
+                                color: Color(0xFF343434),
+                              ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: Row(
+                            children: const <Widget>[
+                              Text(
+                                "Select chapter",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 138, 138, 138),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Builder(builder: (context) {
-                        return lessonData.isEmpty
-                            ? FutureBuilder<Lesson>(
-                                future: ApiProvider()
-                                    .retrieveLessons(widget.courseData.slug),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: maincolor,
-                                        ),
-                                      );
-                                    }
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Builder(builder: (context) {
+                      return lessonData.isEmpty
+                          ? FutureBuilder<Lesson>(
+                              future: ApiProvider()
+                                  .retrieveLessons(widget.courseData.slug),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        color: maincolor,
+                                      ),
+                                    );
                                   }
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                        child: Text(
-                                      "There is no Course",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
+                                }
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                      child: Text(
+                                    "There is no Course",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(184, 138, 138, 138)),
+                                  ));
+                                }
+                                if (snapshot.hasError) {
+                                  return const Center(
+                                      child: Text(
+                                    "Unable to get the data",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(184, 138, 138, 138)),
+                                  ));
+                                }
+                                if (snapshot.hasData) {
+                                  for (var i = 0;
+                                      i < snapshot.data!.lessons.length;
+                                      i++) {
+                                    final lessonData =
+                                        snapshot.data!.lessons[i];
+                                    CourseDatabase.instance
+                                        .createLessons(lessonData!);
                                   }
-                                  if (snapshot.hasError) {
-                                    return const Center(
-                                        child: Text(
-                                      "Unable to get the data",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              184, 138, 138, 138)),
-                                    ));
-                                  }
-                                  if (snapshot.hasData) {
-                                    for (var i = 0;
-                                        i < snapshot.data!.lessons.length;
-                                        i++) {
-                                      final lessonData =
-                                          snapshot.data!.lessons[i];
-                                      CourseDatabase.instance
-                                          .createLessons(lessonData!);
-                                    }
 
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
